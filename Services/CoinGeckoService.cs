@@ -36,13 +36,12 @@ namespace Parcial2024.Services
         // Método para obtener el precio de USD en BTC
         public async Task<decimal> GetUsdPriceInBtcAsync()
         {
-            // Usar el método anterior para obtener el precio de BTC en USD
             var btcPriceInUsd = await GetBtcPriceInUsdAsync();
             if (btcPriceInUsd == 0)
             {
                 throw new Exception("BTC price in USD is zero, unable to calculate USD to BTC");
             }
-            return 1 / btcPriceInUsd; // Inverso de la tasa
+            return 1 / btcPriceInUsd; 
         }
     }
 }

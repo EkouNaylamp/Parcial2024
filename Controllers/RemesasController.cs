@@ -22,7 +22,7 @@ namespace Parcial2024.Controllers
         [HttpGet]
         public IActionResult Registro()
         {
-            // Crear una nueva instancia de Remesa y pasarla a la vista
+            
             var nuevaRemesa = new Remesa();
             return View(nuevaRemesa);
         }
@@ -33,35 +33,27 @@ namespace Parcial2024.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Si la moneda enviada es USD, realizar la conversión a BTC
                 if (nuevaRemesa.MonedaEnviada == "USD")
                 {
-                    // Obtener la tasa de cambio actual de USD a BTC usando la API de CoinGecko
                     var tasaCambioBTC = await _coinGeckoService.GetBtcPriceInUsdAsync();
                     
-                    // Calcular el monto en BTC con la tasa de cambio actual
                     nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado / tasaCambioBTC;
-                    nuevaRemesa.TasaCambio = tasaCambioBTC; // Almacenar la tasa de cambio usada
+                    nuevaRemesa.TasaCambio = tasaCambioBTC; 
                 }
                 else if (nuevaRemesa.MonedaEnviada == "BTC")
                 {
-                    // Obtener la tasa de cambio de BTC a USD usando la API de CoinGecko
-                    var tasaCambioUSD = await _coinGeckoService.GetBtcPriceInUsdAsync(); // Obtener BTC en USD
+                    var tasaCambioUSD = await _coinGeckoService.GetBtcPriceInUsdAsync(); 
                     
-                    // Calcular el monto en USD con la tasa de cambio actual
-                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * tasaCambioUSD; // Multiplica para convertir a USD
-                    nuevaRemesa.TasaCambio = tasaCambioUSD; // Almacenar la tasa de cambio usada
+                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * tasaCambioUSD; 
+                    nuevaRemesa.TasaCambio = tasaCambioUSD; 
                 }
 
-                // Guardar la remesa en la base de datos
                 _context.Remesas.Add(nuevaRemesa);
                 await _context.SaveChangesAsync();
 
-                // Redirigir a la vista de listado de remesas
                 return RedirectToAction("Listar");
             }
 
-            // Si el modelo no es válido, mostrar de nuevo la vista de registro con los datos ingresados
             return View("Registro", nuevaRemesa);
         }
 
