@@ -30,10 +30,19 @@
                 <td>@remesa.Destinatario</td>
                 <td>@remesa.PaisOrigen</td>
                 <td>@remesa.PaisDestino</td>
-                <td>@remesa.MontoEnviado</td>
+                <td>@remesa.MontoEnviado.ToString("0.00")</td>
                 <td>@remesa.MonedaEnviada</td>
-                <td>@remesa.TasaCambio</td>
-                <td>@remesa.MontoFinal.ToString("0.00")</td> <!-- Mostrar con dos decimales -->
+                <td>@remesa.TasaCambio.ToString("0.00")</td>
+                <td>
+                    @if (remesa.MonedaEnviada == "USD")
+                    {
+                        @remesa.MontoFinal.ToString("0.000000") <!-- BTC con 6 decimales -->
+                    }
+                    else
+                    {
+                        @remesa.MontoFinal.ToString("0.00") <!-- USD con 2 decimales -->
+                    }
+                </td>
                 <td>@remesa.EstadoTransaccion</td>
             </tr>
         }

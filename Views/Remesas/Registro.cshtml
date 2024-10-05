@@ -1,61 +1,99 @@
 @model Parcial2024.Models.Remesa
 
-@{
-    ViewData["Title"] = "Registrar Remesa";
-}
-
 <h2>Registrar Remesa</h2>
 
 <form asp-action="Registrar" method="post">
     <div>
         <label for="Remitente">Remitente</label>
-        <input type="text" id="Remitente" name="Remitente" required />
+        <input type="text" id="Remitente" name="Remitente"  required />
     </div>
 
     <div>
         <label for="Destinatario">Destinatario</label>
-        <input type="text" id="Destinatario" name="Destinatario" required />
+        <input type="text" id="Destinatario" name="Destinatario"  required />
     </div>
 
     <div>
         <label for="PaisOrigen">País de Origen</label>
-        <input type="text" id="PaisOrigen" name="PaisOrigen" required />
+        <input type="text" id="PaisOrigen" name="PaisOrigen"  required />
     </div>
 
     <div>
         <label for="PaisDestino">País de Destino</label>
-        <input type="text" id="PaisDestino" name="PaisDestino" required />
+        <input type="text" id="PaisDestino" name="PaisDestino"  required />
     </div>
 
     <div>
         <label for="MontoEnviado">Monto Enviado</label>
-        <input type="number" step="0.01" id="MontoEnviado" name="MontoEnviado" required oninput="calcularMontoFinal()" />
+        <input type="number" step="0.01" id="MontoEnviado" name="MontoEnviado" value="@Model.MontoEnviado.ToString()" required />
     </div>
 
     <div>
-        <label for="MonedaEnviada">Moneda Enviada</label>
-        <select id="MonedaEnviada" name="MonedaEnviada" oninput="calcularMontoFinal()">
-            <option value="USD">USD</option>
-            <option value="BTC">BTC</option>
-        </select>
-    </div>
+      <label for="MonedaEnviada">Moneda Enviada</label>
+<select id="MonedaEnviada" name="MonedaEnviada">
+    @if (Model.MonedaEnviada != null && Model.MonedaEnviada == "USD")
+    {
+        <option value="USD" selected>USD</option>
+    }
+    else
+    {
+        <option value="USD">USD</option>
+    }
+
+    @if (Model.MonedaEnviada != null && Model.MonedaEnviada == "BTC")
+    {
+        <option value="BTC" selected>BTC</option>
+    }
+    else
+    {
+        <option value="BTC">BTC</option>
+    }
+</select>
+
+
+
+
+     </div>
 
     <div>
         <label for="TasaCambio">Tasa de Cambio</label>
-        <input type="number" step="0.01" id="TasaCambio" name="TasaCambio" required oninput="calcularMontoFinal()" />
+        <input type="number" step="0.01" id="TasaCambio" name="TasaCambio" value="@Model.TasaCambio.ToString()" readonly />
     </div>
 
     <div>
         <label>Monto Final</label>
-        <p id="MontoFinal">Será calculado</p> <!-- Aquí se muestra el monto final calculado -->
+        <p id="MontoFinal">@Model.MontoFinal.ToString()</p> <!-- Aquí se muestra el monto final calculado -->
     </div>
 
     <div>
         <label for="EstadoTransaccion">Estado de la Transacción</label>
         <select id="EstadoTransaccion" name="EstadoTransaccion">
-            <option value="Pendiente">Pendiente</option>
-            <option value="Completada">Completada</option>
-            <option value="Cancelada">Cancelada</option>
+            @if (Model.EstadoTransaccion == "Pendiente")
+            {
+                <option value="Pendiente" selected>Pendiente</option>
+            }
+            else
+            {
+                <option value="Pendiente">Pendiente</option>
+            }
+
+            @if (Model.EstadoTransaccion == "Completada")
+            {
+                <option value="Completada" selected>Completada</option>
+            }
+            else
+            {
+                <option value="Completada">Completada</option>
+            }
+
+            @if (Model.EstadoTransaccion == "Cancelada")
+            {
+                <option value="Cancelada" selected>Cancelada</option>
+            }
+            else
+            {
+                <option value="Cancelada">Cancelada</option>
+            }
         </select>
     </div>
 
@@ -64,14 +102,29 @@
     </div>
 </form>
 
-<script>
-    function calcularMontoFinal() {
-        var montoEnviado = parseFloat(document.getElementById("MontoEnviado").value) || 0;
-        var tasaCambio = parseFloat(document.getElementById("TasaCambio").value) || 0;
 
-        if (montoEnviado > 0 && tasaCambio > 0) {
-            var montoFinal = montoEnviado * tasaCambio;
-            document.getElementById("MontoFinal").textContent = montoFinal.toFixed(2); // Muestra el resultado con dos decimales
+
+<script>
+    async function calcularMontoFinal() {
+        var monedaEnviada = document.getElementById("MonedaEnviada").value;
+        var montoEnviado = parseFloat(document.getElementById("MontoEnviado").value) || 0;
+
+        // Solo buscar la tasa de cambio si la moneda enviada es USD
+        if (monedaEnviada === "USD" && montoEnviado > 0) {
+            try {
+                let response = await fetch('/api/coingecko'); // Suponiendo que la ruta de la API sea esta
+                let data = await response.json();
+                let tasaCambio = data.tasaCambioBTC; // Asegúrate de que el controlador retorne este dato
+                document.getElementById("TasaCambio").value = tasaCambio;
+                document.getElementById("MontoFinal").textContent = (montoEnviado / tasaCambio).toFixed(6); // BTC con 6 decimales
+            } catch (error) {
+                document.getElementById("MontoFinal").textContent = "Error al obtener la tasa de cambio";
+            }
+        } else if (monedaEnviada === "BTC" && montoEnviado > 0) {
+            var tasaCambio = parseFloat(document.getElementById("TasaCambio").value) || 0;
+            if (tasaCambio > 0) {
+                document.getElementById("MontoFinal").textContent = (montoEnviado * tasaCambio).toFixed(2); // USD con 2 decimales
+            }
         } else {
             document.getElementById("MontoFinal").textContent = "Será calculado";
         }

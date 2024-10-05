@@ -1,41 +1,61 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Parcial2024.Data;
 using Parcial2024.Models;
+using Parcial2024.Services; // Incluir el espacio de nombres para CoinGeckoService
 
 namespace Parcial2024.Controllers
 {
     public class RemesasController : Controller
     {
-        private readonly ApplicationDbContext _context; // Cambiado a ApplicationDbContext
+        private readonly ApplicationDbContext _context;
+        private readonly CoinGeckoService _coinGeckoService; // Inyectar CoinGeckoService
 
-        public RemesasController(ApplicationDbContext context) // Cambiado a ApplicationDbContext
+        public RemesasController(ApplicationDbContext context, CoinGeckoService coinGeckoService) // Inyectar CoinGeckoService
         {
             _context = context;
+            _coinGeckoService = coinGeckoService;
         }
 
-        // Acción para mostrar la vista de registro
-        [HttpGet]
-        public IActionResult Registro()
-        {
-            return View();
-        }
+       [HttpGet]
+public IActionResult Registro()
+{
+    // Crear una nueva instancia de Remesa y pasarla a la vista
+    var nuevaRemesa = new Remesa();
+    return View(nuevaRemesa);
+}
+
 
         // Acción para registrar una nueva remesa y calcular el monto final
         [HttpPost]
-        public IActionResult Registrar(Remesa nuevaRemesa)
+        public async Task<IActionResult> Registrar(Remesa nuevaRemesa)
         {
             if (ModelState.IsValid)
             {
-                // Calcular el monto final basado en el monto enviado y la tasa de cambio
-                nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * nuevaRemesa.TasaCambio;
+                // Si la moneda enviada es USD, realizar la conversión a BTC
+                if (nuevaRemesa.MonedaEnviada == "USD")
+                {
+                    // Obtener la tasa de cambio actual de USD a BTC usando la API de CoinGecko
+                    var tasaCambioBTC = await _coinGeckoService.GetBtcPriceInUsdAsync();
+                    
+                    // Calcular el monto en BTC con la tasa de cambio actual
+                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado / tasaCambioBTC;
+                    nuevaRemesa.TasaCambio = tasaCambioBTC; // Almacenar la tasa de cambio usada
+                }
+                else if (nuevaRemesa.MonedaEnviada == "BTC")
+                {
+                    // En caso de que la moneda enviada sea BTC, la tasa de cambio ya se ha proporcionado
+                    // y el monto final será el equivalente en USD.
+                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * nuevaRemesa.TasaCambio;
+                }
 
                 // Guardar la remesa en la base de datos
                 _context.Remesas.Add(nuevaRemesa);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
-                // Redirigir a la vista de listado
+                // Redirigir a la vista de listado de remesas
                 return RedirectToAction("Listar");
             }
 
