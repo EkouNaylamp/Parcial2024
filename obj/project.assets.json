@@ -2631,11 +2631,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jair_\\Desktop\\Parcial2024\\Parcial2024.csproj",
+      "projectUniqueName": "c:\\Users\\jair_\\Downloads\\Parcial2024\\Parcial2024.csproj",
       "projectName": "Parcial2024",
-      "projectPath": "C:\\Users\\jair_\\Desktop\\Parcial2024\\Parcial2024.csproj",
+      "projectPath": "c:\\Users\\jair_\\Downloads\\Parcial2024\\Parcial2024.csproj",
       "packagesPath": "C:\\Users\\jair_\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jair_\\Desktop\\Parcial2024\\obj\\",
+      "outputPath": "c:\\Users\\jair_\\Downloads\\Parcial2024\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\jair_\\AppData\\Roaming\\NuGet\\NuGet.Config"
