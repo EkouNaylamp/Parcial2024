@@ -1,0 +1,79 @@
+@model Parcial2024.Models.Remesa
+
+@{
+    ViewData["Title"] = "Registrar Remesa";
+}
+
+<h2>Registrar Remesa</h2>
+
+<form asp-action="Registrar" method="post">
+    <div>
+        <label for="Remitente">Remitente</label>
+        <input type="text" id="Remitente" name="Remitente" required />
+    </div>
+
+    <div>
+        <label for="Destinatario">Destinatario</label>
+        <input type="text" id="Destinatario" name="Destinatario" required />
+    </div>
+
+    <div>
+        <label for="PaisOrigen">País de Origen</label>
+        <input type="text" id="PaisOrigen" name="PaisOrigen" required />
+    </div>
+
+    <div>
+        <label for="PaisDestino">País de Destino</label>
+        <input type="text" id="PaisDestino" name="PaisDestino" required />
+    </div>
+
+    <div>
+        <label for="MontoEnviado">Monto Enviado</label>
+        <input type="number" step="0.01" id="MontoEnviado" name="MontoEnviado" required oninput="calcularMontoFinal()" />
+    </div>
+
+    <div>
+        <label for="MonedaEnviada">Moneda Enviada</label>
+        <select id="MonedaEnviada" name="MonedaEnviada" oninput="calcularMontoFinal()">
+            <option value="USD">USD</option>
+            <option value="BTC">BTC</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="TasaCambio">Tasa de Cambio</label>
+        <input type="number" step="0.01" id="TasaCambio" name="TasaCambio" required oninput="calcularMontoFinal()" />
+    </div>
+
+    <div>
+        <label>Monto Final</label>
+        <p id="MontoFinal">Será calculado</p> <!-- Aquí se muestra el monto final calculado -->
+    </div>
+
+    <div>
+        <label for="EstadoTransaccion">Estado de la Transacción</label>
+        <select id="EstadoTransaccion" name="EstadoTransaccion">
+            <option value="Pendiente">Pendiente</option>
+            <option value="Completada">Completada</option>
+            <option value="Cancelada">Cancelada</option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Registrar Remesa</button>
+    </div>
+</form>
+
+<script>
+    function calcularMontoFinal() {
+        var montoEnviado = parseFloat(document.getElementById("MontoEnviado").value) || 0;
+        var tasaCambio = parseFloat(document.getElementById("TasaCambio").value) || 0;
+
+        if (montoEnviado > 0 && tasaCambio > 0) {
+            var montoFinal = montoEnviado * tasaCambio;
+            document.getElementById("MontoFinal").textContent = montoFinal.toFixed(2); // Muestra el resultado con dos decimales
+        } else {
+            document.getElementById("MontoFinal").textContent = "Será calculado";
+        }
+    }
+</script>

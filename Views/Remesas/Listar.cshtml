@@ -1,0 +1,45 @@
+@model IEnumerable<Parcial2024.Models.Remesa>
+
+@{
+    ViewData["Title"] = "Listado de Remesas";
+}
+
+<h2>Listado de Remesas</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Remitente</th>
+            <th>Destinatario</th>
+            <th>País de Origen</th>
+            <th>País de Destino</th>
+            <th>Monto Enviado</th>
+            <th>Moneda Enviada</th>
+            <th>Tasa de Cambio</th>
+            <th>Monto Final</th>
+            <th>Estado de la Transacción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var remesa in Model)
+        {
+            <tr>
+                <td>@remesa.Id</td>
+                <td>@remesa.Remitente</td>
+                <td>@remesa.Destinatario</td>
+                <td>@remesa.PaisOrigen</td>
+                <td>@remesa.PaisDestino</td>
+                <td>@remesa.MontoEnviado</td>
+                <td>@remesa.MonedaEnviada</td>
+                <td>@remesa.TasaCambio</td>
+                <td>@remesa.MontoFinal.ToString("0.00")</td> <!-- Mostrar con dos decimales -->
+                <td>@remesa.EstadoTransaccion</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a href="@Url.Action("Registro")">Registrar nueva remesa</a>
+</div>
