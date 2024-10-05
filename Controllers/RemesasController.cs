@@ -19,14 +19,13 @@ namespace Parcial2024.Controllers
             _coinGeckoService = coinGeckoService;
         }
 
-       [HttpGet]
-public IActionResult Registro()
-{
-    // Crear una nueva instancia de Remesa y pasarla a la vista
-    var nuevaRemesa = new Remesa();
-    return View(nuevaRemesa);
-}
-
+        [HttpGet]
+        public IActionResult Registro()
+        {
+            // Crear una nueva instancia de Remesa y pasarla a la vista
+            var nuevaRemesa = new Remesa();
+            return View(nuevaRemesa);
+        }
 
         // Acción para registrar una nueva remesa y calcular el monto final
         [HttpPost]
@@ -46,9 +45,12 @@ public IActionResult Registro()
                 }
                 else if (nuevaRemesa.MonedaEnviada == "BTC")
                 {
-                    // En caso de que la moneda enviada sea BTC, la tasa de cambio ya se ha proporcionado
-                    // y el monto final será el equivalente en USD.
-                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * nuevaRemesa.TasaCambio;
+                    // Obtener la tasa de cambio de BTC a USD usando la API de CoinGecko
+                    var tasaCambioUSD = await _coinGeckoService.GetBtcPriceInUsdAsync(); // Obtener BTC en USD
+                    
+                    // Calcular el monto en USD con la tasa de cambio actual
+                    nuevaRemesa.MontoFinal = nuevaRemesa.MontoEnviado * tasaCambioUSD; // Multiplica para convertir a USD
+                    nuevaRemesa.TasaCambio = tasaCambioUSD; // Almacenar la tasa de cambio usada
                 }
 
                 // Guardar la remesa en la base de datos

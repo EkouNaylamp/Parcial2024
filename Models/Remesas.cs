@@ -20,7 +20,7 @@ namespace Parcial2024.Models
         public decimal MontoEnviado { get; set; }
         
         public string MonedaEnviada { get; set; } // "USD" o "BTC"
-        
+
         public decimal TasaCambio { get; set; } // Tasa entre USD y BTC
         
         public decimal MontoFinal { get; set; } // Monto en moneda de destino

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Parcial2024")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ba5429cb9d6103e9267abc5a491da624b17c3dc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b029ddc7f7f42b649ddcf8958946464686be1c37")]
 [assembly: System.Reflection.AssemblyProductAttribute("Parcial2024")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Parcial2024")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
