@@ -14,6 +14,6 @@ namespace Parcial2024.Data
     {
     }
 
-    public DbSet<CuentaBancaria> CuentasBancarias { get; set; }
+    public DbSet<Remesa> Remesas { get; set; }
 }
 }

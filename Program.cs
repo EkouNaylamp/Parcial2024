@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore; // Para el uso de DbContext
+using Parcial2024.Data; // Ajusta esto según tu espacio de nombres
+using Parcial2024.Services; // Esto es para registrar el servicio CoinGecko
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Agregar controladores con vistas
 builder.Services.AddControllersWithViews();
+
+// Configuración de la base de datos (PostgreSQL)
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Registro de CoinGeckoService en el contenedor de dependencias
+builder.Services.AddHttpClient<CoinGeckoService>();
 
 var app = builder.Build();
 
@@ -9,7 +20,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -20,8 +30,9 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Enrutamiento predeterminado
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Remesas}/{action=Listar}/{id?}");
 
 app.Run();

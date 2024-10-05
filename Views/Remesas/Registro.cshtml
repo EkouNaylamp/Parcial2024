@@ -1,0 +1,105 @@
+@model Parcial2024.Models.Remesa
+
+<h2>Registrar Remesa</h2>
+
+<form asp-action="Registrar" method="post">
+    <div>
+        <label for="Remitente">Remitente</label>
+        <input type="text" id="Remitente" name="Remitente"  required />
+    </div>
+
+    <div>
+        <label for="Destinatario">Destinatario</label>
+        <input type="text" id="Destinatario" name="Destinatario"  required />
+    </div>
+
+    <div>
+        <label for="PaisOrigen">País de Origen</label>
+        <input type="text" id="PaisOrigen" name="PaisOrigen"  required />
+    </div>
+
+    <div>
+        <label for="PaisDestino">País de Destino</label>
+        <input type="text" id="PaisDestino" name="PaisDestino"  required />
+    </div>
+
+    <div>
+        <label for="MontoEnviado">Monto Enviado</label>
+        <input type="number" step="0.01" id="MontoEnviado" name="MontoEnviado" value="@Model.MontoEnviado.ToString()" required />
+    </div>
+
+    <div>
+      <label for="MonedaEnviada">Moneda Enviada</label>
+<select id="MonedaEnviada" name="MonedaEnviada">
+    @if (Model.MonedaEnviada != null && Model.MonedaEnviada == "USD")
+    {
+        <option value="USD" selected>USD</option>
+    }
+    else
+    {
+        <option value="USD">USD</option>
+    }
+
+    @if (Model.MonedaEnviada != null && Model.MonedaEnviada == "BTC")
+    {
+        <option value="BTC" selected>BTC</option>
+    }
+    else
+    {
+        <option value="BTC">BTC</option>
+    }
+</select>
+
+
+
+
+     </div>
+
+    <div>
+        <label for="TasaCambio">Tasa de Cambio en la lista :(</label>
+        
+    </div>
+
+    <div>
+        <label>Monto final en la lista :(</label>
+        
+    </div>
+    
+
+    <div>
+        <label for="EstadoTransaccion">Estado de la Transacción</label>
+        <select id="EstadoTransaccion" name="EstadoTransaccion">
+            @if (Model.EstadoTransaccion == "Pendiente")
+            {
+                <option value="Pendiente" selected>Pendiente</option>
+            }
+            else
+            {
+                <option value="Pendiente">Pendiente</option>
+            }
+
+            @if (Model.EstadoTransaccion == "Completada")
+            {
+                <option value="Completada" selected>Completada</option>
+            }
+            else
+            {
+                <option value="Completada">Completada</option>
+            }
+
+            @if (Model.EstadoTransaccion == "Cancelada")
+            {
+                <option value="Cancelada" selected>Cancelada</option>
+            }
+            else
+            {
+                <option value="Cancelada">Cancelada</option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">Registrar Remesa</button>
+    </div>
+</form>
+

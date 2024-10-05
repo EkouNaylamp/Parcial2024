@@ -1,0 +1,68 @@
+@model IEnumerable<Parcial2024.Models.Remesa>
+
+@{
+    ViewData["Title"] = "Listado de Remesas";
+}
+
+<h2 class="text-center my-4">Listado de Remesas</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>País de Origen</th>
+                <th>País de Destino</th>
+                <th>Monto Enviado</th>
+                <th>Moneda Enviada</th>
+                <th>Tasa de Cambio</th>
+                <th>Monto Final</th>
+                <th>Estado de la Transacción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var remesa in Model)
+            {
+                <tr>
+                    <td>@remesa.Id</td>
+                    <td>@remesa.Remitente</td>
+                    <td>@remesa.Destinatario</td>
+                    <td>@remesa.PaisOrigen</td>
+                    <td>@remesa.PaisDestino</td>
+                    <td>@remesa.MontoEnviado.ToString("0.00")</td>
+                    <td>@remesa.MonedaEnviada</td>
+                    <td>@remesa.TasaCambio.ToString("0.00")</td>
+                    <td>
+                        @if (remesa.MonedaEnviada == "USD")
+                        {
+                            @remesa.MontoFinal.ToString("0.000000") <!-- BTC con 6 decimales -->
+                        }
+                        else
+                        {
+                            @remesa.MontoFinal.ToString("0.00") <!-- USD con 2 decimales -->
+                        }
+                    </td>  
+                    <td>@remesa.EstadoTransaccion</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center my-4">
+    <a href="@Url.Action("Registro")" class="btn btn-primary">Registrar nueva remesa</a>
+</div>
+
+<style>
+    .table {
+        width: 100%;
+        margin: auto;
+        text-align: center;
+    }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
